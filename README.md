@@ -1,6 +1,4 @@
-# NodeJS-Typescript API Template
-
-This is a template with the basic setup and folder structure of a nodejs and typescript API
+#Simple Token Based Auth
 
 This codebase supports:
 
@@ -10,7 +8,6 @@ This codebase supports:
 - Token based authentication
 - Docker
 - Tests (with jest and supertest)
-
 
 Authors: @codergab
 Template Forked: @codemicah

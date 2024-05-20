@@ -7,14 +7,16 @@ export class AuthController {
   static async createAccount(req: Request, res: Response) {
     try {
       const { first_name, last_name, email, phone, password } = req.body;
-      const user = await UserModel.findOne({ email }).lean();
 
+      const user = await UserModel.findOne({ email }).lean();
       if (user) {
-        return res.json(
-          new ErrorResponseObject(
-            "email belongs to an existing account! login?"
-          )
-        );
+        return res
+          .status(400)
+          .json(
+            new ErrorResponseObject(
+              "email belongs to an existing account! login?"
+            )
+          );
       }
 
       const userDetails = await new UserModel({
@@ -24,7 +26,6 @@ export class AuthController {
         phone,
         password,
       }).save();
-
       const access_token = generateAccessToken(userDetails);
 
       return res.json(
@@ -38,14 +39,19 @@ export class AuthController {
   static async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
-      const user = await UserModel.findOne({ email }).lean();
 
+      const user = await UserModel.findOne({ email });
       if (!user) {
-        return res.json(new ErrorResponseObject("Invalid credentials"));
+        return res
+          .status(400)
+          .json(new ErrorResponseObject("Invalid credentials"));
       }
 
-      if (!(await user.isValidPassword(password))) {
-        return res.json(new ErrorResponseObject("Invalid credentials"));
+      const isValidUserPassword = await user.isValidPassword(password);
+      if (!isValidUserPassword) {
+        return res
+          .status(400)
+          .json(new ErrorResponseObject("Invalid credentials"));
       }
 
       const access_token = generateAccessToken(user);
@@ -59,6 +65,7 @@ export class AuthController {
   }
 
   static async getAccountDetails(req: Request, res: Response) {
-    const user = await UserModel.findById(req.user._id);
+    const user = await UserModel.findById(req.user.id).select('first_name last_name email phone');
+    return res.json(new SuccessResponse("user details", user));
   }
 }
