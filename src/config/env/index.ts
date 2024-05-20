@@ -13,4 +13,5 @@ if (error) throw new Error(`Config validation error: ${error.message}`);
 export const config: ConfigTypes = {
   PORT: envVariables.PORT,
   JWT_SECRET: envVariables.JWT_SECRET,
+  DATABASE_URI: envVariables.DATABASE_URI,
 };

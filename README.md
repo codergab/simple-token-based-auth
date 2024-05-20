@@ -10,3 +10,7 @@ This codebase supports:
 - Token based authentication
 - Docker
 - Tests (with jest and supertest)
+
+
+Authors: @codergab
+Template Forked: @codemicah

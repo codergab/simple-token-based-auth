@@ -1,17 +1,20 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
+import Routers from "./routes";
+import connectDb from "./config/database";
 
 const app = express();
 
 app.use(cors());
-app.use(helmet());
+app.use(helmet({
+  noSniff: true,
+  xPoweredBy: false,
+}));
 app.use(express.json());
+connectDb();
 
-app.get("/test", (_req: Request, res: Response) => {
-  return res.sendStatus(200);
-});
-
+app.use('/api/v1', Routers)
 app.use("*", (req: Request, res: Response) => {
   const path = req.originalUrl;
   const method = req.method;
