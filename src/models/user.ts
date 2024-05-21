@@ -51,4 +51,6 @@ UserSchema.methods.isValidPassword = async function (
   }
 };
 
+// Indexes
+UserSchema.index({ email: 1})
 export const UserModel = model('User', UserSchema);
